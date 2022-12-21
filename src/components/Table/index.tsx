@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { SearchForm } from "../SearchForm"
 import { PriceHighlight, TableContainer, TableContent } from "./styles"
 import { TransactionsContext } from "../../contexts/TransactionsContext"
+import { dateFormatter, priceFormatter } from "../../utils/formatter";
 
 export function Table() {
     const { transactions } = useContext(TransactionsContext);
@@ -16,10 +17,13 @@ export function Table() {
                             <tr key={transaction.id}>
                                 <td width="50%">{transaction.description}</td>
                                 <td>
-                                    <PriceHighlight variant={transaction.type}>R$ {transaction.price}</PriceHighlight>
+                                    <PriceHighlight variant={transaction.type}>
+                                        {transaction.type == 'outcome' && '- '}
+                                        {priceFormatter.format(transaction.price)}
+                                    </PriceHighlight>
                                 </td>
                                 <td>{transaction.category}</td>
-                                <td>{transaction.createdAt}</td>
+                                <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
                             </tr>
                         )
                     })}
